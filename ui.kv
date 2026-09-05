@@ -1,0 +1,959 @@
+#:import dp kivy.metrics.dp
+#:import Theme core.theme.Theme
+#:import Icon widgets.icons.Icon
+#:import IconTextButton widgets.buttons.IconTextButton
+#:import PrimaryButton widgets.buttons.PrimaryButton
+#:import SecondaryButton widgets.buttons.SecondaryButton
+#:import StatCard widgets.cards.StatCard
+
+
+<RootScreenManager>:
+
+
+# ============================================================
+# STAT CARD
+# ============================================================
+
+<StatCard>:
+    orientation: "vertical"
+    padding: dp(14)
+    spacing: dp(5)
+
+    canvas.before:
+        Color:
+            rgba: Theme.SURFACE
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(18), dp(18), dp(18), dp(18)]
+
+    Label:
+        text: root.value
+        font_size: "25sp"
+        bold: True
+        color: Theme.TEXT
+        size_hint_y: None
+        height: dp(38)
+        halign: "center"
+        valign: "middle"
+        text_size: self.size
+
+    Label:
+        text: root.label
+        font_size: "10sp"
+        color: Theme.TEXT_MUTED
+        halign: "center"
+        valign: "middle"
+        text_size: self.size
+
+
+# ============================================================
+# PRIMARY BUTTON
+# ============================================================
+
+<PrimaryButton>:
+    background_normal: ""
+    background_down: ""
+    background_color: 0, 0, 0, 0
+    color: 1, 1, 1, 1
+    bold: True
+    font_size: "14sp"
+
+    canvas.before:
+        Color:
+            rgba: Theme.PRIMARY
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(14), dp(14), dp(14), dp(14)]
+
+
+# ============================================================
+# SECONDARY BUTTON
+# ============================================================
+
+<SecondaryButton>:
+    background_normal: ""
+    background_down: ""
+    background_color: 0, 0, 0, 0
+    color: Theme.TEXT
+    bold: True
+    font_size: "14sp"
+
+    canvas.before:
+        Color:
+            rgba: Theme.SURFACE_2
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(14), dp(14), dp(14), dp(14)]
+
+
+# ============================================================
+# HOME SCREEN
+# ============================================================
+
+<HomeScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(22), dp(25), dp(22), dp(16)
+        spacing: dp(15)
+
+
+        # ----------------------------------------------------
+        # HEADER
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(58)
+
+            BoxLayout:
+                orientation: "vertical"
+
+                Label:
+                    text: "Good afternoon"
+                    font_size: "13sp"
+                    color: Theme.TEXT_SECONDARY
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+
+                Label:
+                    text: "VerbMaster"
+                    font_size: "28sp"
+                    bold: True
+                    color: Theme.TEXT
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+
+            Button:
+                size_hint_x: None
+                width: dp(48)
+                background_normal: ""
+                background_down: ""
+                background_color: 0, 0, 0, 0
+                on_release: app.show_settings()
+
+                Icon:
+                    icon: "gear"
+                    icon_size: 22
+                    color: Theme.TEXT
+                    center: self.parent.center
+
+
+        # ----------------------------------------------------
+        # TITLE
+        # ----------------------------------------------------
+
+        Label:
+            text: "Ready to practice?"
+            size_hint_y: None
+            height: dp(35)
+            font_size: "20sp"
+            bold: True
+            color: Theme.TEXT
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # MAIN QUIZ CARD
+        # ----------------------------------------------------
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(9)
+            size_hint_y: None
+            height: dp(240)
+
+            canvas.before:
+                Color:
+                    rgba: Theme.SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(22), dp(22), dp(22), dp(22)]
+
+            Label:
+                text: "IRREGULAR VERBS"
+                font_size: "12sp"
+                bold: True
+                color: Theme.PRIMARY
+                size_hint_y: None
+                height: dp(28)
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+            Label:
+                text: str(root.verb_count) + " verbs to master"
+                font_size: "26sp"
+                bold: True
+                color: Theme.TEXT
+                size_hint_y: None
+                height: dp(43)
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+            Label:
+                text: "Practice all three forms and build your confidence."
+                font_size: "13sp"
+                color: Theme.TEXT_SECONDARY
+                halign: "left"
+                valign: "middle"
+                text_size: self.width, None
+
+            Widget:
+
+            IconTextButton:
+                caption: "START QUIZ"
+                icon: "arrow-right"
+                icon_position: "right"
+                icon_size: 17
+                spacing: dp(7)
+                font_size: "14sp"
+                size_hint_y: None
+                height: dp(54)
+                background_color: Theme.PRIMARY
+                color: 1, 1, 1, 1
+                on_release: app.start_quiz()
+
+
+        # ----------------------------------------------------
+        # PROGRESS TITLE
+        # ----------------------------------------------------
+
+        Label:
+            text: "Your progress"
+            size_hint_y: None
+            height: dp(30)
+            font_size: "15sp"
+            bold: True
+            color: Theme.TEXT
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # PROGRESS CARDS
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(112)
+            spacing: dp(10)
+
+            StatCard:
+                value: str(root.best_score) + "%"
+                label: "BEST SCORE"
+
+            StatCard:
+                value: str(root.quizzes)
+                label: "QUIZZES"
+
+            StatCard:
+                value: str(root.verb_count)
+                label: "VERBS"
+
+
+        Widget:
+
+
+        # ----------------------------------------------------
+        # BOTTOM NAVIGATION
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            spacing: dp(4)
+
+            IconTextButton:
+                caption: "HOME"
+                icon: "house"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: Theme.SURFACE_2
+                color: Theme.TEXT
+                on_release: app.go_home()
+
+            IconTextButton:
+                caption: "PRACTICE"
+                icon: "play"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: 0, 0, 0, 0
+                color: Theme.TEXT_SECONDARY
+                on_release: app.start_quiz()
+
+            IconTextButton:
+                caption: "STATS"
+                icon: "chart"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: 0, 0, 0, 0
+                color: Theme.TEXT_SECONDARY
+                on_release: app.show_stats()
+
+
+# ============================================================
+# QUIZ SCREEN
+# ============================================================
+
+<QuizScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(22), dp(22), dp(22), dp(20)
+        spacing: dp(14)
+
+
+        # ----------------------------------------------------
+        # HEADER
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+
+            Button:
+                size_hint_x: None
+                width: dp(45)
+                background_normal: ""
+                background_down: ""
+                background_color: 0, 0, 0, 0
+                on_release: app.go_home()
+
+                Icon:
+                    icon: "arrow-left"
+                    icon_size: 23
+                    color: Theme.TEXT
+                    center: self.parent.center
+
+            Label:
+                text: "PRACTICE"
+                font_size: "18sp"
+                bold: True
+                color: Theme.TEXT
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+            Label:
+                text: str(root.question_number) + " / " + str(root.question_count)
+                font_size: "13sp"
+                color: Theme.PRIMARY
+                halign: "right"
+                valign: "middle"
+                text_size: self.size
+
+
+        # ----------------------------------------------------
+        # PROGRESS BAR
+        # ----------------------------------------------------
+
+        ProgressBar:
+            max: root.question_count
+            value: root.question_number - 1
+            size_hint_y: None
+            height: dp(5)
+
+
+        # ----------------------------------------------------
+        # QUESTION TYPE
+        # ----------------------------------------------------
+
+        Label:
+            text: root.ask_type
+            font_size: "13sp"
+            color: Theme.TEXT_SECONDARY
+            size_hint_y: None
+            height: dp(30)
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # QUESTION CARD
+        # ----------------------------------------------------
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(14)
+
+            canvas.before:
+                Color:
+                    rgba: Theme.SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(22), dp(22), dp(22), dp(22)]
+
+            Label:
+                text: root.show_word
+                font_size: "38sp"
+                bold: True
+                color: Theme.TEXT
+                size_hint_y: None
+                height: dp(88)
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+            Label:
+                text: "Type your answer"
+                font_size: "12sp"
+                color: Theme.TEXT_MUTED
+                size_hint_y: None
+                height: dp(24)
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+            TextInput:
+                id: answer_input
+                multiline: False
+                size_hint_y: None
+                height: dp(58)
+                font_size: "20sp"
+                halign: "center"
+                padding: dp(13), dp(13)
+                background_normal: ""
+                background_color: Theme.SURFACE_2
+                foreground_color: Theme.TEXT
+                cursor_color: Theme.PRIMARY
+                on_text_validate: root.check_answer()
+
+            Label:
+                text: root.feedback
+                font_size: "14sp"
+                bold: True
+                color: root.feedback_color
+                size_hint_y: None
+                height: dp(35)
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+            Widget:
+
+            IconTextButton:
+                caption: root.button_text
+                icon: "arrow-right"
+                icon_position: "right"
+                icon_size: 17
+                spacing: dp(7)
+                font_size: "14sp"
+                size_hint_y: None
+                height: dp(55)
+                background_color: Theme.PRIMARY
+                color: 1, 1, 1, 1
+                on_release: root.handle_button()
+
+
+# ============================================================
+# STATS SCREEN
+# ============================================================
+
+<StatsScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(22), dp(22), dp(22), dp(20)
+        spacing: dp(15)
+
+
+        # ----------------------------------------------------
+        # HEADER
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+
+            Button:
+                size_hint_x: None
+                width: dp(45)
+                background_normal: ""
+                background_down: ""
+                background_color: 0, 0, 0, 0
+                on_release: root.home()
+
+                Icon:
+                    icon: "arrow-left"
+                    icon_size: 23
+                    color: Theme.TEXT
+                    center: self.parent.center
+
+            Label:
+                text: "STATISTICS"
+                font_size: "20sp"
+                bold: True
+                color: Theme.TEXT
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+
+        # ----------------------------------------------------
+        # SUBTITLE
+        # ----------------------------------------------------
+
+        Label:
+            text: "Your progress"
+            font_size: "14sp"
+            color: Theme.TEXT_SECONDARY
+            size_hint_y: None
+            height: dp(30)
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # STAT CARDS
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(130)
+            spacing: dp(10)
+
+            StatCard:
+                value: str(root.quizzes)
+                label: "QUIZZES"
+
+            StatCard:
+                value: str(root.best_score) + "%"
+                label: "BEST SCORE"
+
+            StatCard:
+                value: str(root.average_score) + "%"
+                label: "AVERAGE"
+
+
+        Widget:
+
+
+        # ----------------------------------------------------
+        # PRACTICE CARD
+        # ----------------------------------------------------
+        
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(6)
+            size_hint_y: None
+            height: dp(175)
+        
+            canvas.before:
+                Color:
+                    rgba: Theme.SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(20), dp(20), dp(20), dp(20)]
+        
+            Label:
+                text: "Keep practicing"
+                font_size: "20sp"
+                bold: True
+                color: Theme.TEXT
+                size_hint_y: None
+                height: dp(30)
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+        
+            Label:
+                text: "Regular short sessions are the easiest way to improve."
+                font_size: "13sp"
+                color: Theme.TEXT_SECONDARY
+                size_hint_y: None
+                height: dp(36)
+                halign: "left"
+                valign: "middle"
+                text_size: self.width, None
+        
+            IconTextButton:
+                caption: "START PRACTICE"
+                icon: "arrow-right"
+                icon_position: "right"
+                icon_size: 17
+                spacing: dp(7)
+                font_size: "14sp"
+                size_hint_y: None
+                height: dp(50)
+                background_color: Theme.PRIMARY
+                color: 1, 1, 1, 1
+                on_release: root.practice()
+
+
+        # ----------------------------------------------------
+        # BOTTOM NAVIGATION
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            spacing: dp(4)
+
+            IconTextButton:
+                caption: "HOME"
+                icon: "house"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: 0, 0, 0, 0
+                color: Theme.TEXT_SECONDARY
+                on_release: root.home()
+
+            IconTextButton:
+                caption: "PRACTICE"
+                icon: "play"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: 0, 0, 0, 0
+                color: Theme.TEXT_SECONDARY
+                on_release: root.practice()
+
+            IconTextButton:
+                caption: "STATS"
+                icon: "chart"
+                icon_size: 14
+                spacing: dp(3)
+                font_size: "11sp"
+                background_color: Theme.SURFACE_2
+                color: Theme.TEXT
+                on_release: root.home()
+
+
+# ============================================================
+# RESULT SCREEN
+# ============================================================
+
+<ResultScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(25)
+        spacing: dp(14)
+
+
+        Widget:
+
+
+        Label:
+            text: "QUIZ COMPLETE"
+            font_size: "14sp"
+            bold: True
+            color: Theme.PRIMARY
+            size_hint_y: None
+            height: dp(30)
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+
+        Label:
+            text: root.score_text
+            font_size: "58sp"
+            bold: True
+            color: Theme.TEXT
+            size_hint_y: None
+            height: dp(80)
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+
+        Label:
+            text: root.result_message
+            font_size: "18sp"
+            color: Theme.TEXT_SECONDARY
+            size_hint_y: None
+            height: dp(40)
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # RESULT CARDS
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(110)
+            spacing: dp(12)
+
+            StatCard:
+                value: str(root.correct)
+                label: "CORRECT"
+
+            StatCard:
+                value: str(root.incorrect)
+                label: "INCORRECT"
+
+
+        Widget:
+
+
+        # ----------------------------------------------------
+        # TRY AGAIN
+        # ----------------------------------------------------
+
+        IconTextButton:
+            caption: "TRY AGAIN"
+            icon: "arrow-right"
+            icon_position: "right"
+            icon_size: 17
+            spacing: dp(7)
+            font_size: "14sp"
+            size_hint_y: None
+            height: dp(56)
+            background_color: Theme.PRIMARY
+            color: 1, 1, 1, 1
+            on_release: root.retry()
+
+
+        # ----------------------------------------------------
+        # HOME
+        # ----------------------------------------------------
+
+        SecondaryButton:
+            text: "BACK TO HOME"
+            size_hint_y: None
+            height: dp(52)
+            on_release: root.home()
+
+
+        Widget:
+
+
+# ============================================================
+# SETTINGS SCREEN
+# ============================================================
+
+<SettingsScreen>:
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(22), dp(22), dp(22), dp(20)
+        spacing: dp(15)
+
+
+        # ----------------------------------------------------
+        # HEADER
+        # ----------------------------------------------------
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+
+            Button:
+                size_hint_x: None
+                width: dp(45)
+                background_normal: ""
+                background_down: ""
+                background_color: 0, 0, 0, 0
+                on_release: root.home()
+
+                Icon:
+                    icon: "arrow-left"
+                    icon_size: 23
+                    color: Theme.TEXT
+                    center: self.parent.center
+
+            Label:
+                text: "SETTINGS"
+                font_size: "20sp"
+                bold: True
+                color: Theme.TEXT
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+
+        # ----------------------------------------------------
+        # SUBTITLE
+        # ----------------------------------------------------
+
+        Label:
+            text: "Application settings"
+            font_size: "14sp"
+            color: Theme.TEXT_SECONDARY
+            size_hint_y: None
+            height: dp(30)
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+
+
+        # ----------------------------------------------------
+        # QUIZ SETTINGS CARD
+        # ----------------------------------------------------
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(10)
+            size_hint_y: None
+            height: dp(210)
+
+            canvas.before:
+                Color:
+                    rgba: Theme.SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(22), dp(22), dp(22), dp(22)]
+
+            Label:
+                text: "Quiz"
+                font_size: "20sp"
+                bold: True
+                color: Theme.TEXT
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                size_hint_y: None
+                height: dp(35)
+
+            Label:
+                text: str(root.question_count) + " questions per practice session"
+                font_size: "13sp"
+                color: Theme.TEXT_SECONDARY
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                size_hint_y: None
+                height: dp(30)
+
+            # ------------------------------------------------
+            # QUESTION COUNT SELECTOR
+            # ------------------------------------------------
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(55)
+                spacing: dp(6)
+
+                Button:
+                    text: "5"
+                    font_size: "14sp"
+                    color: 1, 1, 1, 1
+                    bold: root.question_count == 5
+                    background_normal: ""
+                    background_down: ""
+                    background_color: Theme.PRIMARY if root.question_count == 5 else Theme.SURFACE_2
+                    on_release: root.set_question_count(5)
+
+                Button:
+                    text: "10"
+                    font_size: "14sp"
+                    color: 1, 1, 1, 1
+                    bold: root.question_count == 10
+                    background_normal: ""
+                    background_down: ""
+                    background_color: Theme.PRIMARY if root.question_count == 10 else Theme.SURFACE_2
+                    on_release: root.set_question_count(10)
+
+                Button:
+                    text: "15"
+                    font_size: "14sp"
+                    color: 1, 1, 1, 1
+                    bold: root.question_count == 15
+                    background_normal: ""
+                    background_down: ""
+                    background_color: Theme.PRIMARY if root.question_count == 15 else Theme.SURFACE_2
+                    on_release: root.set_question_count(15)
+
+                Button:
+                    text: "20"
+                    font_size: "14sp"
+                    color: 1, 1, 1, 1
+                    bold: root.question_count == 20
+                    background_normal: ""
+                    background_down: ""
+                    background_color: Theme.PRIMARY if root.question_count == 20 else Theme.SURFACE_2
+                    on_release: root.set_question_count(20)
+
+                Button:
+                    text: "30"
+                    font_size: "14sp"
+                    color: 1, 1, 1, 1
+                    bold: root.question_count == 30
+                    background_normal: ""
+                    background_down: ""
+                    background_color: Theme.PRIMARY if root.question_count == 30 else Theme.SURFACE_2
+                    on_release: root.set_question_count(30)
+
+
+        # ----------------------------------------------------
+        # ICONS CARD
+        # ----------------------------------------------------
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(8)
+            size_hint_y: None
+            height: dp(145)
+
+            canvas.before:
+                Color:
+                    rgba: Theme.SURFACE
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(22), dp(22), dp(22), dp(22)]
+
+            Label:
+                text: "Icons"
+                font_size: "20sp"
+                bold: True
+                color: Theme.TEXT
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                size_hint_y: None
+                height: dp(35)
+
+            Label:
+                text: "Font Awesome icons enabled"
+                font_size: "13sp"
+                color: Theme.TEXT_SECONDARY
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+
+        Widget:
+
+
+        # ----------------------------------------------------
+        # BACK TO HOME
+        # ----------------------------------------------------
+
+        SecondaryButton:
+            text: "BACK TO HOME"
+            size_hint_y: None
+            height: dp(56)
+            on_release: root.home()
+
+
+        Widget:
